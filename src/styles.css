@@ -1,0 +1,89 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-olive: var(--olive);
+  --color-gold: var(--gold);
+  --color-caras: var(--caras);
+  --color-surface: var(--surface);
+  --font-display: "Cormorant Garamond", ui-serif, Georgia, serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+  --radius: 0.5rem;
+  /* Off-white, paper-like */
+  --background: oklch(0.991 0.002 80);
+  --surface: oklch(0.978 0.004 85);
+  --foreground: oklch(0.22 0.01 80);
+  --muted: oklch(0.96 0.005 85);
+  --muted-foreground: oklch(0.48 0.012 80);
+  --border: oklch(0.91 0.006 80);
+  --accent: oklch(0.96 0.005 85);
+  --accent-foreground: oklch(0.22 0.01 80);
+  --primary: oklch(0.22 0.01 80);
+  --primary-foreground: oklch(0.99 0.002 80);
+  /* Discrete accents */
+  --olive: oklch(0.46 0.055 110);
+  --gold: oklch(0.74 0.07 80);
+  /* CARAS-inspired editorial red — used sparingly in Imprensa section */
+  --caras: oklch(0.55 0.20 25);
+  --input: var(--border);
+  --ring: var(--olive);
+  --card: var(--background);
+  --card-foreground: var(--foreground);
+  --popover: var(--background);
+  --popover-foreground: var(--foreground);
+  --secondary: var(--muted);
+  --secondary-foreground: var(--foreground);
+  --destructive: oklch(0.55 0.2 27);
+  --destructive-foreground: oklch(0.99 0 0);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11";
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: -0.015em;
+  }
+}
+
+@utility hairline {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    color-mix(in oklab, var(--olive) 35%, transparent),
+    transparent
+  );
+}
