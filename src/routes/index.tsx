@@ -11,7 +11,7 @@ import pacienteHhaline from "@/assets/paciente-hhaline.jpeg.asset.json";
 import pacienteKaren from "@/assets/paciente-karen.jpeg.asset.json";
 import fotoComDraKaren from "@/assets/foto-com-dra-karen.jpeg.asset.json";
 import fotoComDraCamila from "@/assets/foto-com-dra-camila.jpeg.asset.json";
-import pacienteJessilane from "@/assets/paciente-jessilane-v2.png.asset.json";
+
 
 
 
@@ -134,7 +134,7 @@ const HISTORIAS: Historia[] = [
   {
     nome: "Jessilane Alves",
     contexto: "Comunicadora · ex-BBB",
-    foto: pacienteJessilane.url,
+    foto: "/assets/jessilane-avatar.jpg",
     iniciais: "JA",
     texto:
       "Um acompanhamento que respeita o tempo, a rotina e a individualidade de cada pessoa.",
@@ -184,7 +184,7 @@ export const Route = createFileRoute("/")({
     meta: [
       {
         title:
-          "Dra. Manoela Oliveira de Souza — Emagrecimento clínico e saúde metabólica",
+          "Dra. Manoela Souza — Emagrecimento clínico e saúde metabólica",
       },
       {
         name: "description",
@@ -194,7 +194,7 @@ export const Route = createFileRoute("/")({
       {
         property: "og:title",
         content:
-          "Dra. Manoela Oliveira de Souza — Emagrecimento clínico e saúde metabólica",
+          "Dra. Manoela Souza — Emagrecimento clínico e saúde metabólica",
       },
       {
         property: "og:description",
@@ -204,7 +204,7 @@ export const Route = createFileRoute("/")({
       {
         name: "twitter:title",
         content:
-          "Dra. Manoela Oliveira de Souza — Emagrecimento clínico e saúde metabólica",
+          "Dra. Manoela Souza — Emagrecimento clínico e saúde metabólica",
       },
       {
         name: "twitter:description",
@@ -313,6 +313,38 @@ function ConsultorioCarousel() {
         ))}
       </div>
     </div>
+  );
+}
+
+function AvatarImg({
+  src,
+  alt,
+  iniciais,
+  objectPosition,
+}: {
+  src: string | null;
+  alt: string;
+  iniciais: string;
+  objectPosition?: string;
+}) {
+  const [errored, setErrored] = useState(false);
+  if (!src || errored) {
+    return (
+      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[var(--olive)]/30 bg-[var(--olive)]/10 font-display text-base text-[var(--olive)]">
+        {iniciais}
+      </div>
+    );
+  }
+  return (
+    <img
+      src={src}
+      alt={alt}
+      loading="lazy"
+      decoding="async"
+      onError={() => setErrored(true)}
+      className="h-12 w-12 shrink-0 rounded-full object-cover"
+      style={{ objectPosition: objectPosition ?? "center" }}
+    />
   );
 }
 
@@ -521,11 +553,11 @@ function LandingPage() {
               Sobre
             </p>
             <h2 className="mt-3 font-display text-3xl leading-tight sm:text-4xl">
-              Dra. Manoela Oliveira de Souza
+              Dra. Manoela Souza
             </h2>
             <div className="mt-6 max-w-xl space-y-5 text-base leading-relaxed text-muted-foreground sm:text-lg">
               <p>
-                Dra. Manoela Oliveira de Souza é médica com atuação voltada ao
+                Dra. Manoela Souza é médica com atuação voltada ao
                 emagrecimento clínico, saúde metabólica e qualidade de vida.
               </p>
               <p>
@@ -687,20 +719,12 @@ function LandingPage() {
                   “{h.texto}”
                 </p>
                 <div className="mt-auto flex items-center gap-4 border-t border-border/60 pt-5">
-                  {h.foto ? (
-                    <img
-                      src={h.foto}
-                      alt={h.nome}
-                      loading="lazy"
-                      decoding="async"
-                      className="h-12 w-12 shrink-0 rounded-full object-cover"
-                      style={{ objectPosition: h.miniaturaPosition ?? "center" }}
-                    />
-                  ) : (
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[var(--olive)]/30 bg-[var(--olive)]/10 font-display text-base text-[var(--olive)]">
-                      {h.iniciais}
-                    </div>
-                  )}
+                  <AvatarImg
+                    src={h.foto}
+                    alt={h.nome}
+                    iniciais={h.iniciais}
+                    objectPosition={h.miniaturaPosition}
+                  />
                   <div className="min-w-0">
                     <p className="text-sm font-medium text-foreground">{h.nome}</p>
                     <p className="mt-1 text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
@@ -969,7 +993,7 @@ function LandingPage() {
         <div className="mx-auto max-w-6xl px-6 py-14 sm:px-10">
           <div className="grid gap-10 sm:grid-cols-[1fr_auto]">
             <div>
-              <p className="font-display text-lg">Dra. Manoela Oliveira de Souza</p>
+              <p className="font-display text-lg">Dra. Manoela Souza</p>
               <p className="mt-2 text-sm text-muted-foreground">CREMESP 0274007</p>
               <p className="mt-3 max-w-md text-sm leading-relaxed text-muted-foreground">
                 Médica com atuação em emagrecimento clínico, saúde metabólica
