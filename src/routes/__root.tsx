@@ -60,23 +60,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Dra. Manoela Souza — Medicina personalizada para emagrecimento e saúde metabólica" },
+      { title: "Dra. Manoela Oliveira de Souza — Emagrecimento clínico e saúde metabólica" },
       {
         name: "description",
         content:
-          "Acompanhamento médico individualizado para emagrecimento saudável, preservação da saúde e resultados sustentáveis. Consultas particulares com a Dra. Manoela Souza.",
+          "Acompanhamento médico individualizado para emagrecimento clínico, saúde metabólica e qualidade de vida.",
       },
-      { property: "og:title", content: "Dra. Manoela Souza — Medicina personalizada para emagrecimento e saúde metabólica" },
+      { property: "og:title", content: "Dra. Manoela Oliveira de Souza — Emagrecimento clínico e saúde metabólica" },
       {
         property: "og:description",
         content:
-          "Acompanhamento médico individualizado para emagrecimento saudável e saúde metabólica.",
+          "Acompanhamento médico individualizado para emagrecimento clínico, saúde metabólica e qualidade de vida.",
       },
       { property: "og:type", content: "website" },
-      { name: "twitter:title", content: "Dra. Manoela Souza — Medicina personalizada para emagrecimento e saúde metabólica" },
-      { name: "description", content: "Landing page premium para Dra. Manoela Souza, focada em gerar contatos qualificados para consultas médicas via WhatsApp." },
-      { property: "og:description", content: "Landing page premium para Dra. Manoela Souza, focada em gerar contatos qualificados para consultas médicas via WhatsApp." },
-      { name: "twitter:description", content: "Landing page premium para Dra. Manoela Souza, focada em gerar contatos qualificados para consultas médicas via WhatsApp." },
+      { name: "twitter:title", content: "Dra. Manoela Oliveira de Souza — Emagrecimento clínico e saúde metabólica" },
+      { name: "twitter:description", content: "Acompanhamento médico individualizado para emagrecimento clínico, saúde metabólica e qualidade de vida." },
       { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/d03fe916-a566-4455-a2dd-e73eded9ee6a/id-preview-1a95b332--45f6bf6e-a9bf-4063-b37f-a11f0093a854.lovable.app-1781577883495.png" },
       { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/d03fe916-a566-4455-a2dd-e73eded9ee6a/id-preview-1a95b332--45f6bf6e-a9bf-4063-b37f-a11f0093a854.lovable.app-1781577883495.png" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -90,6 +88,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap",
+      },
+    ],
+    scripts: [
+      {
+        src: "https://www.googletagmanager.com/gtag/js?id=AW-18245418780",
+        async: true,
+      },
+      {
+        children:
+          "window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','AW-18245418780');",
       },
     ],
   }),

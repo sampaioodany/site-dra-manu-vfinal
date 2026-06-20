@@ -9,12 +9,37 @@ import pacienteCamila from "@/assets/paciente-camila.jpeg.asset.json";
 import pacienteRafa from "@/assets/paciente-rafa.jpeg.asset.json";
 import pacienteHhaline from "@/assets/paciente-hhaline.jpeg.asset.json";
 import pacienteKaren from "@/assets/paciente-karen.jpeg.asset.json";
+import fotoComDraKaren from "@/assets/foto-com-dra-karen.jpeg.asset.json";
+import fotoComDraCamila from "@/assets/foto-com-dra-camila.jpeg.asset.json";
+import fotoComDraJessilane from "@/assets/foto-com-dra-jessilane-v3.jpg.asset.json";
+import pacienteJessilane from "@/assets/paciente-jessilane-v2.png.asset.json";
+import quemDraManoelaThumb from "@/assets/quem-materia-famosos.jpg.asset.json";
+
 
 const WHATSAPP_NUMBER = "5511917431212";
 const WHATSAPP_MESSAGE = encodeURIComponent(
   "Olá, Dra. Manoela. Gostaria de agendar uma consulta particular.",
 );
 const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${WHATSAPP_MESSAGE}`;
+
+const ENDERECO_CONSULTORIO = "R. Pedroso Alvarenga, 1255 - Itaim Bibi, São Paulo - SP, 04531-012";
+const GOOGLE_MAPS_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(ENDERECO_CONSULTORIO)}`;
+
+declare global {
+  interface Window {
+    gtag?: (...args: unknown[]) => void;
+  }
+}
+
+function trackWhatsAppConversion() {
+  if (typeof window !== "undefined" && typeof window.gtag === "function") {
+    window.gtag("event", "conversion", {
+      send_to: "AW-18245418780/YNRrCIng1sIcEJz-i_xD",
+      value: 1.0,
+      currency: "BRL",
+    });
+  }
+}
 
 const VIDEOS = [
   { id: "n49yn1Y5iXA", title: "Entrevista — Dra. Manoela Souza" },
@@ -23,60 +48,77 @@ const VIDEOS = [
 ];
 
 const ARTIGO_DESTAQUE = {
-  categoria: "Saúde & Emagrecimento",
+  categoria: "Eventos · Bem-estar",
   titulo:
-    "Médica alerta sobre riscos da automedicação com canetas emagrecedoras adotadas por famosas",
+    "Dra. Manoela Souza no encontro de bem-estar em São Paulo",
   resumo:
-    "Em entrevista à revista CARAS, a Dra. Manoela Souza explica por que o uso indiscriminado de medicações injetáveis para emagrecer, sem avaliação médica, pode trazer riscos sérios à saúde — e aponta o caminho seguro do acompanhamento clínico.",
-  veiculo: "CARAS · Bem-estar",
-  url: "https://caras.com.br/bem-estar/medica-alerta-riscos-da-automedicacao-com-canetas-emagrecedoras-adotadas-por-famosas.phtml",
+    "A revista QUEM destacou o encontro em São Paulo que reuniu nomes da medicina e do entretenimento em torno de saúde, longevidade e qualidade de vida — com a Dra. Manoela Souza como referência médica em emagrecimento clínico e acompanhamento individualizado.",
+  veiculo: "Revista QUEM · Globo",
+  url: "https://revistaquem.globo.com/eventos/noticia/2026/03/famosas-prestigiam-encontro-de-bem-estar-em-sp.ghtml",
+  capa: quemDraManoelaThumb.url,
 };
 
 const ARTIGOS_SECUNDARIOS = [
   {
-    categoria: "Coluna",
-    titulo: "Coluna e participações da Dra. Manoela Souza na CARAS",
-    veiculo: "CARAS",
-    url: "https://caras.com.br/autor/dra-manoela-souza",
+    categoria: "Entrevista ao vivo",
+    titulo: "Live com a Dra. Manoela Souza — emagrecimento clínico e saúde metabólica",
+    veiculo: "YouTube · Ao vivo",
+    url: "https://www.youtube.com/live/YCVKqE1JPxo?si=5_K_y78-CDVVt7Gi",
   },
   {
     categoria: "Bem-estar",
-    titulo: "Emagrecimento sustentável: o que realmente funciona a longo prazo",
+    titulo:
+      "Médica alerta para riscos da automedicação com canetas emagrecedoras adotadas por famosas",
     veiculo: "CARAS · Bem-estar",
-    url: "https://caras.com.br/canal/bem-estar",
+    url: "https://caras.com.br/bem-estar/medica-alerta-riscos-da-automedicacao-com-canetas-emagrecedoras-adotadas-por-famosas.phtml",
   },
   {
-    categoria: "Saúde metabólica",
-    titulo: "Sono, hormônios e composição corporal: o tripé que poucos consideram",
-    veiculo: "CARAS · Bem-estar",
-    url: "https://caras.com.br/canal/bem-estar",
-  },
-  {
-    categoria: "Entrevista",
-    titulo: "Dra. Manoela Souza fala sobre acompanhamento médico individualizado",
-    veiculo: "CARAS",
-    url: "https://caras.com.br/autor/dra-manoela-souza",
+    categoria: "História de paciente",
+    titulo:
+      "Camila Moura perde 40 kg com acompanhamento médico: ‘Não foi um processo rápido nem simples’",
+    veiculo: "Portal Léo Dias · Saúde",
+    url: "https://portalleodias.com/saude/ex-fazenda-camila-moura-perde-40-kg-nao-foi-um-processo-rapido-e-nem-simples",
   },
 ];
 
 
-const HISTORIAS = [
+type Historia = {
+  nome: string;
+  contexto: string;
+  foto: string | null;
+  iniciais: string;
+  texto: string;
+  fotoComDra?: string;
+  fotoComDraPosition?: string;
+  fotoComDraAspect?: string;
+  fotoComDraFit?: "cover" | "contain";
+  miniaturaPosition?: string;
+};
+
+const HISTORIAS: Historia[] = [
   {
     nome: "Karen Bacic",
+    contexto: "Ex-participante de Casamento às Cegas",
     foto: pacienteKaren.url,
     iniciais: "KB",
     texto:
-      "Você me deu o que sempre sonhei: confiança e autoestima para usar a roupa que eu quiser.",
+      "Encontrei confiança e autoestima para voltar a me sentir bem comigo mesma.",
+    fotoComDra: fotoComDraCamila.url,
+    fotoComDraPosition: "center 18%",
   },
   {
     nome: "Camila Moura",
+    contexto: "Influenciadora digital",
     foto: pacienteCamila.url,
     iniciais: "CM",
     texto:
-      "Hoje celebro 31kg a menos e uma vida inteira de conquistas a mais.",
+      "Um processo cuidadoso, conduzido com atenção médica e acolhimento em cada etapa.",
+    fotoComDra: fotoComDraKaren.url,
+    fotoComDraPosition: "center 15%",
   },
   {
     nome: "Rafa Godinho",
+    contexto: "Diretor de marketing · ex-Mynd",
     foto: pacienteRafa.url,
     iniciais: "RG",
     texto:
@@ -84,18 +126,29 @@ const HISTORIAS = [
   },
   {
     nome: "Haline",
+    contexto: "Paciente · relato público",
     foto: pacienteHhaline.url,
     iniciais: "H",
     texto:
-      "Você me viu além do peso. Me acolheu, me escutou e me ajudou a recomeçar.",
+      "Fui vista além do peso. Acolhida, escutada e acompanhada com seriedade.",
+  },
+  {
+    nome: "Jessilane Alves",
+    contexto: "Comunicadora · ex-BBB",
+    foto: pacienteJessilane.url,
+    iniciais: "JA",
+    texto:
+      "Um acompanhamento que respeita o tempo, a rotina e a individualidade de cada pessoa.",
+    fotoComDra: fotoComDraJessilane.url,
+    fotoComDraPosition: "center 40%",
   },
 ];
 
 const HERO_BADGES = [
-  "CRM-BA 19.356",
-  "RQE 11.920",
+  "CREMESP 0274007",
   "Emagrecimento Clínico",
   "Saúde Metabólica",
+  "Suporte Multidisciplinar",
   "Acompanhamento Individualizado",
 ];
 
@@ -109,7 +162,7 @@ const DIFERENCIAIS = [
     d: "Conduta desenhada a partir do contexto e dos objetivos de cada paciente.",
   },
   {
-    t: "Equipe multidisciplinar",
+    t: "Suporte multidisciplinar",
     d: "Atuação integrada com nutrição, psicologia e educação física quando necessário.",
   },
   {
@@ -132,12 +185,32 @@ export const Route = createFileRoute("/")({
     meta: [
       {
         title:
-          "Dra. Manoela Souza — Emagrecimento clínico e saúde metabólica",
+          "Dra. Manoela Oliveira de Souza — Emagrecimento clínico e saúde metabólica",
       },
       {
         name: "description",
         content:
-          "Médica com atuação em emagrecimento clínico e saúde metabólica. Acompanhamento médico próximo, baseado em ciência e em resultados que se sustentam ao longo do tempo.",
+          "Acompanhamento médico individualizado para emagrecimento clínico, saúde metabólica e qualidade de vida.",
+      },
+      {
+        property: "og:title",
+        content:
+          "Dra. Manoela Oliveira de Souza — Emagrecimento clínico e saúde metabólica",
+      },
+      {
+        property: "og:description",
+        content:
+          "Acompanhamento médico individualizado para emagrecimento clínico, saúde metabólica e qualidade de vida.",
+      },
+      {
+        name: "twitter:title",
+        content:
+          "Dra. Manoela Oliveira de Souza — Emagrecimento clínico e saúde metabólica",
+      },
+      {
+        name: "twitter:description",
+        content:
+          "Acompanhamento médico individualizado para emagrecimento clínico, saúde metabólica e qualidade de vida.",
       },
     ],
   }),
@@ -206,7 +279,7 @@ function ConsultorioCarousel() {
     <div className="w-full">
       <div
         ref={trackRef}
-        className="relative aspect-[4/3] w-full overflow-hidden rounded-[1.25rem] bg-[var(--surface)] sm:aspect-[16/10]"
+        className="relative aspect-[4/5] w-full overflow-hidden rounded-[1.25rem] bg-[var(--surface)] sm:aspect-[4/5]"
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
@@ -218,8 +291,8 @@ function ConsultorioCarousel() {
             alt={`Consultório da Dra. Manoela Souza`}
             loading={i === 0 ? "eager" : "lazy"}
             decoding="async"
-            sizes="(min-width: 1024px) 640px, 100vw"
-            className={`absolute inset-0 h-full w-full object-contain transition-opacity duration-[1200ms] ease-out ${
+            sizes="(min-width: 1024px) 720px, 100vw"
+            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-[1200ms] ease-out ${
               i === index ? "opacity-100" : "opacity-0"
             }`}
             style={{ imageRendering: "auto" }}
@@ -254,7 +327,7 @@ function LandingPage() {
             Dra. Manoela Souza
           </span>
           <a
-            href={WHATSAPP_URL}
+            href={WHATSAPP_URL} onClick={trackWhatsAppConversion}
             target="_blank"
             rel="noopener"
             className="hidden items-center gap-2.5 text-sm text-foreground/80 transition-colors hover:text-[var(--olive)] sm:inline-flex"
@@ -270,9 +343,10 @@ function LandingPage() {
       <section className="mx-auto max-w-6xl px-6 pb-20 pt-16 sm:px-10 sm:pt-24 lg:pt-32">
         <div className="grid items-center gap-14 lg:grid-cols-[1fr_0.85fr] lg:gap-16">
           <div>
-            <h1 className="font-display text-4xl leading-[1.08] tracking-tight text-foreground sm:text-5xl lg:text-[3.6rem]">
+            <h1 className="font-display text-[2.1rem] leading-[1.12] tracking-tight text-foreground sm:text-5xl lg:text-[3.4rem]">
               Emagrecer com{" "}
-              <em className="not-italic text-[var(--olive)]">cuidado médico de verdade.</em>
+              <em className="not-italic text-[var(--olive)]">cuidado médico de verdade</em>{" "}
+              e suporte multidisciplinar.
             </h1>
             <p className="mt-7 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
               Acompanhamento clínico próximo para quem quer perder peso preservando a saúde
@@ -280,7 +354,7 @@ function LandingPage() {
             </p>
             <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
               <a
-                href={WHATSAPP_URL}
+                href={WHATSAPP_URL} onClick={trackWhatsAppConversion}
                 target="_blank"
                 rel="noopener"
                 className="group inline-flex items-center justify-center gap-2 rounded-full bg-foreground px-7 py-3.5 text-sm font-medium text-background transition-all hover:bg-[var(--olive)]"
@@ -289,7 +363,7 @@ function LandingPage() {
                 <ArrowIcon className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </a>
               <a
-                href={WHATSAPP_URL}
+                href={WHATSAPP_URL} onClick={trackWhatsAppConversion}
                 target="_blank"
                 rel="noopener"
                 className="inline-flex items-center justify-center gap-2.5 rounded-full border border-border bg-background px-7 py-3.5 text-sm font-medium text-foreground transition-colors hover:border-[var(--olive)] hover:text-[var(--olive)]"
@@ -396,7 +470,7 @@ function LandingPage() {
             },
           ];
           return (
-            <div className="mt-12 grid gap-y-12 sm:grid-cols-2 sm:gap-x-16 sm:gap-y-14">
+            <div className="mt-14 grid gap-y-14 sm:grid-cols-2 sm:gap-x-16 sm:gap-y-16">
               {itens.map((it) => (
                 <div key={it.t} className="flex flex-col items-center text-center">
                   <svg
@@ -406,21 +480,22 @@ function LandingPage() {
                     strokeWidth="0.65"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="h-14 w-14 text-[var(--gold)]"
+                    className="h-[4.5rem] w-[4.5rem] text-[var(--gold)]"
                     aria-hidden="true"
                   >
                     {it.icone}
                   </svg>
-                  <h3 className="mt-6 font-display text-lg font-normal leading-none text-foreground">
+                  <h3 className="mt-7 font-display text-[1.5rem] font-normal leading-tight text-foreground sm:text-[1.65rem]">
                     {it.t}
                   </h3>
-                  <p className="mx-auto mt-4 max-w-xs text-base leading-relaxed text-muted-foreground">
+                  <p className="mx-auto mt-5 max-w-[17rem] text-[1.05rem] leading-[1.75] text-muted-foreground sm:max-w-xs sm:text-lg sm:leading-[1.75]">
                     {it.d}
                   </p>
                 </div>
               ))}
             </div>
           );
+
         })()}
       </section>
 
@@ -446,21 +521,22 @@ function LandingPage() {
             <p className="text-[11px] uppercase tracking-[0.22em] text-[var(--olive)]">
               Sobre
             </p>
-            <h2 className="mt-3 font-display text-3xl leading-tight sm:text-4xl">Dra. Manoela Souza</h2>
+            <h2 className="mt-3 font-display text-3xl leading-tight sm:text-4xl">
+              Dra. Manoela Oliveira de Souza
+            </h2>
             <div className="mt-6 max-w-xl space-y-5 text-base leading-relaxed text-muted-foreground sm:text-lg">
               <p>
-                Médica com atuação voltada ao emagrecimento clínico, saúde metabólica e
-                qualidade de vida.
+                Dra. Manoela Oliveira de Souza é médica com atuação voltada ao
+                emagrecimento clínico, saúde metabólica e qualidade de vida.
               </p>
               <p>
-
-                Mais do que promover perda de peso, o objetivo é construir resultados
-                sustentáveis que façam sentido para a vida real de cada paciente.
+                Seu acompanhamento considera histórico, rotina, exames, hábitos,
+                composição corporal e objetivos individuais, com suporte
+                multidisciplinar quando necessário.
               </p>
               <p>
-                Com presença em veículos nacionais e participação frequente em conteúdos
-                educativos sobre saúde e emagrecimento, Dra. Manoela Souza defende uma
-                abordagem baseada em ciência, individualidade e acompanhamento de longo prazo.
+                A proposta é construir um plano seguro, realista e possível de
+                manter, respeitando a realidade de cada paciente.
               </p>
             </div>
             <dl className="mt-8 flex flex-wrap gap-x-10 gap-y-2 text-sm">
@@ -468,18 +544,12 @@ function LandingPage() {
                 <dt className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
                   Registro
                 </dt>
-                <dd className="mt-1 font-medium">CRM-BA 19.356</dd>
-              </div>
-              <div>
-                <dt className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
-                  Qualificação
-                </dt>
-                <dd className="mt-1 font-medium">RQE 11.920</dd>
+                <dd className="mt-1 font-medium">CREMESP 0274007</dd>
               </div>
             </dl>
             <div className="mt-10">
               <a
-                href={WHATSAPP_URL}
+                href={WHATSAPP_URL} onClick={trackWhatsAppConversion}
                 target="_blank"
                 rel="noopener"
                 className="group inline-flex items-center gap-2 rounded-full bg-foreground px-7 py-3.5 text-sm font-medium text-background transition-all hover:bg-[var(--olive)]"
@@ -514,6 +584,23 @@ function LandingPage() {
                 O objetivo é que cada paciente se sinta segura, acolhida e acompanhada
                 durante toda a jornada.
               </p>
+            </div>
+            <div className="mt-8 border-t border-border/60 pt-6">
+              <p className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+                Atendimento presencial
+              </p>
+              <p className="mt-3 text-sm leading-relaxed text-foreground/85">
+                {ENDERECO_CONSULTORIO}
+              </p>
+              <a
+                href={GOOGLE_MAPS_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-3 inline-flex items-center gap-1.5 text-xs uppercase tracking-[0.18em] text-[var(--olive)] transition-opacity hover:opacity-70"
+              >
+                Ver no Google Maps
+                <ArrowIcon className="h-3.5 w-3.5" />
+              </a>
             </div>
           </div>
         </div>
@@ -605,45 +692,66 @@ function LandingPage() {
         </div>
 
         <div className="mt-14 grid gap-6 sm:grid-cols-2 sm:gap-7">
-          {HISTORIAS.map((h) => (
+          {HISTORIAS.map((h, i) => {
+            const isLast = i === HISTORIAS.length - 1;
+            const isOddLast = isLast && HISTORIAS.length % 2 === 1;
+            return (
             <article
               key={h.nome}
-              className="flex flex-col gap-6 rounded-[1.5rem] border border-border bg-[var(--surface)]/40 p-7 transition-colors hover:border-[var(--olive)]/40 sm:p-9"
+              className={`flex flex-col overflow-hidden rounded-[1.5rem] border border-border bg-[var(--surface)]/40 transition-colors hover:border-[var(--olive)]/40 ${
+                isOddLast ? "sm:col-span-2 sm:mx-auto sm:max-w-xl" : ""
+              }`}
             >
-              <svg
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-                className="h-6 w-6 text-[var(--olive)]"
-                fill="currentColor"
-              >
-                <path d="M9.5 6C6 6 4 8.5 4 12v6h6v-6H7c0-2 1-3.5 3-4l-.5-2zm10 0c-3.5 0-5.5 2.5-5.5 6v6h6v-6h-3c0-2 1-3.5 3-4l-.5-2z" />
-              </svg>
-              <p className="font-display text-lg leading-snug text-foreground sm:text-xl">
-                “{h.texto}”
-              </p>
-              <div className="mt-auto flex items-center gap-4 pt-2">
-                {h.foto ? (
+              {h.fotoComDra && (
+                <div className={`relative ${h.fotoComDraAspect ?? "aspect-[2/1]"} w-full overflow-hidden bg-[var(--surface)]`}>
                   <img
-                    src={h.foto}
-                    alt={h.nome}
+                    src={h.fotoComDra}
+                    alt={`${h.nome} com a Dra. Manoela Souza`}
                     loading="lazy"
                     decoding="async"
-                    className="h-12 w-12 rounded-full object-cover"
+                    className={`h-full w-full ${h.fotoComDraFit === "contain" ? "object-contain" : "object-cover"}`}
+                    style={{ objectPosition: h.fotoComDraPosition ?? "center" }}
                   />
-                ) : (
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--olive)]/15 text-sm font-medium text-[var(--olive)]">
-                    {h.iniciais}
+                </div>
+              )}
+              <div className="flex flex-1 flex-col gap-6 p-7 sm:p-9">
+                <svg
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                  className="h-6 w-6 text-[var(--olive)]"
+                  fill="currentColor"
+                >
+                  <path d="M9.5 6C6 6 4 8.5 4 12v6h6v-6H7c0-2 1-3.5 3-4l-.5-2zm10 0c-3.5 0-5.5 2.5-5.5 6v6h6v-6h-3c0-2 1-3.5 3-4l-.5-2z" />
+                </svg>
+                <p className="font-display text-lg leading-snug text-foreground sm:text-xl">
+                  “{h.texto}”
+                </p>
+                <div className="mt-auto flex items-center gap-4 border-t border-border/60 pt-5">
+                  {h.foto ? (
+                    <img
+                      src={h.foto}
+                      alt={h.nome}
+                      loading="lazy"
+                      decoding="async"
+                      className="h-12 w-12 shrink-0 rounded-full object-cover"
+                      style={{ objectPosition: h.miniaturaPosition ?? "center" }}
+                    />
+                  ) : (
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[var(--olive)]/30 bg-[var(--olive)]/10 font-display text-base text-[var(--olive)]">
+                      {h.iniciais}
+                    </div>
+                  )}
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-foreground">{h.nome}</p>
+                    <p className="mt-1 text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+                      {h.contexto}
+                    </p>
                   </div>
-                )}
-                <div>
-                  <p className="text-sm font-medium text-foreground">{h.nome}</p>
-                  <p className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
-                    Relato de paciente
-                  </p>
                 </div>
               </div>
             </article>
-          ))}
+            );
+          })}
         </div>
       </section>
 
@@ -667,8 +775,38 @@ function LandingPage() {
           </p>
         </div>
 
+        {/* Vídeos primeiro — maior autoridade visual */}
+        <div className="mt-16">
+          <div className="mb-7 flex items-center gap-3">
+            <span className="h-px w-8 bg-[var(--caras)]" aria-hidden="true" />
+            <p className="text-[11px] uppercase tracking-[0.28em] text-[var(--caras)]">
+              Entrevistas em vídeo
+            </p>
+            <span className="h-px flex-1 bg-border" />
+          </div>
+          <div className="grid gap-7 md:grid-cols-3">
+            {VIDEOS.map((v) => (
+              <div
+                key={v.id}
+                className="group overflow-hidden rounded-[1.25rem] border border-border bg-[var(--surface)] transition-colors hover:border-[var(--caras)]/40"
+              >
+                <div className="relative aspect-video w-full">
+                  <iframe
+                    src={`https://www.youtube.com/embed/${v.id}`}
+                    title={v.title}
+                    loading="lazy"
+                    allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="absolute inset-0 h-full w-full"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Layout editorial: destaque + coluna de últimas notícias */}
-        <div className="mt-16 grid gap-12 lg:grid-cols-[1.45fr_1fr] lg:gap-16">
+        <div className="mt-20 grid gap-12 lg:grid-cols-[1.45fr_1fr] lg:gap-16">
           {/* Matéria destaque */}
           <a
             href={ARTIGO_DESTAQUE.url}
@@ -677,16 +815,20 @@ function LandingPage() {
             className="group flex flex-col overflow-hidden rounded-[1.25rem] border border-border bg-[var(--surface)]/40 transition-all hover:border-[var(--caras)]/50 hover:bg-[var(--surface)]"
           >
             <div className="relative aspect-[16/10] w-full overflow-hidden bg-foreground/95">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span className="font-display text-6xl font-medium tracking-[0.2em] text-background sm:text-7xl">
-                  CARAS
-                </span>
-              </div>
+              <img
+                src={ARTIGO_DESTAQUE.capa}
+                alt="Capa da matéria na revista QUEM"
+                loading="lazy"
+                decoding="async"
+                width={1200}
+                height={675}
+                className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.03]"
+              />
               <div
                 aria-hidden="true"
                 className="absolute left-0 right-0 top-0 h-1 bg-[var(--caras)]"
               />
-              <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/40 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/75 via-black/25 to-transparent" />
               <span className="absolute left-5 top-5 inline-flex items-center gap-2 rounded-full bg-[var(--caras)] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-white">
                 <span className="h-1.5 w-1.5 rounded-full bg-white/90" />
                 Destaque
@@ -733,7 +875,7 @@ function LandingPage() {
                     href={a.url}
                     target="_blank"
                     rel="noopener"
-                    className="group relative flex items-start justify-between gap-5 py-6 pl-4 transition-colors hover:bg-[var(--surface)]/60"
+                    className="group relative flex items-start justify-between gap-5 py-5 pl-4 transition-colors hover:bg-[var(--surface)]/60"
                   >
                     <span
                       aria-hidden="true"
@@ -743,10 +885,10 @@ function LandingPage() {
                       <p className="text-[10px] uppercase tracking-[0.24em] text-[var(--caras)]">
                         {a.categoria}
                       </p>
-                      <p className="mt-2 font-display text-[18px] leading-snug text-foreground sm:text-[19px]">
+                      <p className="mt-2 font-display text-[15px] leading-snug text-foreground sm:text-[16px]">
                         {a.titulo}
                       </p>
-                      <p className="mt-2 text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+                      <p className="mt-2 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
                         {a.veiculo}
                       </p>
                     </div>
@@ -756,36 +898,6 @@ function LandingPage() {
               ))}
             </ul>
           </aside>
-        </div>
-
-        {/* Vídeos */}
-        <div className="mt-20">
-          <div className="mb-7 flex items-center gap-3">
-            <span className="h-px w-8 bg-[var(--caras)]" aria-hidden="true" />
-            <p className="text-[11px] uppercase tracking-[0.28em] text-[var(--caras)]">
-              Entrevistas em vídeo
-            </p>
-            <span className="h-px flex-1 bg-border" />
-          </div>
-          <div className="grid gap-7 md:grid-cols-3">
-            {VIDEOS.map((v) => (
-              <div
-                key={v.id}
-                className="group overflow-hidden rounded-[1.25rem] border border-border bg-[var(--surface)] transition-colors hover:border-[var(--caras)]/40"
-              >
-                <div className="relative aspect-video w-full">
-                  <iframe
-                    src={`https://www.youtube.com/embed/${v.id}`}
-                    title={v.title}
-                    loading="lazy"
-                    allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    className="absolute inset-0 h-full w-full"
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
@@ -855,39 +967,38 @@ function LandingPage() {
             Próximo passo
           </p>
           <div className="mx-auto mt-6 h-px w-16 bg-background/30" />
-          <h2 className="mt-8 font-display text-[2.4rem] leading-[1.05] text-background sm:text-[3.4rem]">
-            Seu próximo resultado não precisa{" "}
-            <em className="not-italic text-[var(--gold)]">ser mais uma tentativa.</em>
+          <h2 className="mt-8 font-display text-[2.1rem] leading-[1.1] text-background sm:text-[3rem]">
+            Comece sua jornada com{" "}
+            <em className="not-italic text-[var(--gold)]">acompanhamento médico individualizado.</em>
           </h2>
           <p className="mx-auto mt-8 max-w-xl text-base leading-relaxed text-background/80 sm:text-lg">
-            Com acompanhamento médico próximo, estratégia individualizada e foco em
-            saúde metabólica, é possível construir um caminho sustentável para o
-            emagrecimento.
+            Se você busca emagrecer com segurança, suporte multidisciplinar e um
+            plano possível de manter, fale com a equipe e agende sua consulta.
           </p>
 
           <div className="mt-12 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
             <a
-              href={WHATSAPP_URL}
+              href={WHATSAPP_URL} onClick={trackWhatsAppConversion}
               target="_blank"
               rel="noopener"
               className="group inline-flex items-center justify-center gap-3 rounded-full bg-background px-9 py-4 text-base font-medium text-foreground shadow-[0_20px_45px_-20px_rgba(0,0,0,0.6)] transition-all hover:scale-[1.02] hover:bg-[var(--gold)] hover:text-foreground"
             >
-              Agendar consulta
-              <ArrowIcon className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              <WhatsAppIcon className="h-6 w-6" />
+              Falar no WhatsApp
             </a>
             <a
-              href={WHATSAPP_URL}
+              href={WHATSAPP_URL} onClick={trackWhatsAppConversion}
               target="_blank"
               rel="noopener"
               className="inline-flex items-center justify-center gap-3 rounded-full border border-background/40 px-9 py-4 text-base font-medium text-background transition-colors hover:border-background hover:bg-background/5"
             >
-              <WhatsAppIcon className="h-7 w-7 text-[var(--gold)]" />
-              Falar com a Dra. Manoela
+              Agendar consulta
+              <ArrowIcon className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </a>
           </div>
 
           <p className="mt-10 text-[11px] uppercase tracking-[0.22em] text-background/55">
-            Atendimento particular · CRM-BA 19.356 · RQE 11.920
+            Atendimento particular · CREMESP 0274007
           </p>
         </div>
       </section>
@@ -898,13 +1009,30 @@ function LandingPage() {
         <div className="mx-auto max-w-6xl px-6 py-14 sm:px-10">
           <div className="grid gap-10 sm:grid-cols-[1fr_auto]">
             <div>
-              <p className="font-display text-lg">Dra. Manoela Souza</p>
-              <p className="mt-2 text-sm text-muted-foreground">
-                CRM-BA 19.356 &middot; RQE 11.920
+              <p className="font-display text-lg">Dra. Manoela Oliveira de Souza</p>
+              <p className="mt-2 text-sm text-muted-foreground">CREMESP 0274007</p>
+              <p className="mt-3 max-w-md text-sm leading-relaxed text-muted-foreground">
+                Médica com atuação em emagrecimento clínico, saúde metabólica
+                e qualidade de vida.
               </p>
+              <p className="mt-5 text-xs uppercase tracking-[0.2em] text-muted-foreground/80">
+                Atendimento presencial
+              </p>
+              <p className="mt-2 max-w-md text-sm leading-relaxed text-muted-foreground">
+                {ENDERECO_CONSULTORIO}
+              </p>
+              <a
+                href={GOOGLE_MAPS_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-2 inline-flex items-center gap-1.5 text-xs uppercase tracking-[0.18em] text-[var(--olive)] transition-opacity hover:opacity-70"
+              >
+                Ver no Google Maps
+                <ArrowIcon className="h-3.5 w-3.5" />
+              </a>
             </div>
             <a
-              href={WHATSAPP_URL}
+              href={WHATSAPP_URL} onClick={trackWhatsAppConversion}
               target="_blank"
               rel="noopener"
               className="inline-flex items-center gap-2.5 self-start text-sm text-foreground/80 transition-colors hover:text-[var(--olive)]"
@@ -924,7 +1052,7 @@ function LandingPage() {
 
       {/* Sticky WhatsApp (mobile) */}
       <a
-        href={WHATSAPP_URL}
+        href={WHATSAPP_URL} onClick={trackWhatsAppConversion}
         target="_blank"
         rel="noopener"
         aria-label="Falar no WhatsApp"
