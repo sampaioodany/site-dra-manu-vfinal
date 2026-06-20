@@ -506,7 +506,7 @@ function LandingPage() {
       {/* SOBRE */}
       <section className="mx-auto max-w-6xl px-6 py-24 sm:px-10 sm:py-32">
         <div className="grid items-center gap-12 md:grid-cols-[0.85fr_1.15fr] lg:gap-20">
-          <div className="relative mx-auto w-full max-w-[300px] md:max-w-[340px]">
+          <div className="relative mx-auto w-full max-w-[360px] md:max-w-[400px]">
             <div className="relative aspect-[3/4] w-full overflow-hidden rounded-[1.25rem] bg-[var(--surface)] shadow-[0_24px_50px_-28px_rgba(60,60,40,0.22)]">
               <img
                 src={draManoelaEvento.url}
@@ -566,8 +566,10 @@ function LandingPage() {
 
       {/* CONSULTÓRIO — carousel + texto ao lado */}
       <section className="mx-auto max-w-6xl px-6 py-24 sm:px-10 sm:py-32">
-        <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
-          <ConsultorioCarousel />
+        <div className="grid items-center gap-10 lg:grid-cols-[0.82fr_1.18fr] lg:gap-16">
+          <div className="mx-auto w-full max-w-[360px] lg:max-w-none">
+            <ConsultorioCarousel />
+          </div>
           <div>
             <p className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
               O consultório
@@ -608,47 +610,6 @@ function LandingPage() {
 
       <Divider />
 
-      {/* ALÉM DA BALANÇA */}
-      <section className="mx-auto max-w-2xl px-6 py-24 sm:px-10 sm:py-32">
-        <div className="flex items-center gap-3">
-          <span className="h-px w-8 bg-[var(--olive)]" aria-hidden="true" />
-          <p className="text-[11px] uppercase tracking-[0.28em] text-[var(--olive)]">
-            A abordagem
-          </p>
-        </div>
-        <h2 className="mt-5 font-display text-[2.1rem] leading-tight sm:text-[2.8rem]">
-          O emagrecimento vai além da balança
-        </h2>
-
-        <div className="mt-12 space-y-10">
-          <p className="text-[1.05rem] leading-[1.85] text-foreground/80 sm:text-[1.15rem]">
-            O excesso de peso raramente está ligado apenas à alimentação.{" "}
-            <span className="italic text-[var(--olive)]">
-              Sono, estresse, rotina, composição corporal, comportamento e saúde metabólica
-            </span>{" "}
-            também influenciam diretamente os resultados.
-          </p>
-
-          <p className="text-base leading-[1.8] text-muted-foreground sm:text-lg">
-            Por isso, o acompanhamento é construído de forma ampla, buscando melhorar não
-            apenas o peso, mas também{" "}
-            <span className="italic text-[var(--olive)]">
-              energia, disposição, autoestima e qualidade de vida
-            </span>.
-          </p>
-
-          <blockquote className="relative border-l border-[var(--olive)]/30 pl-6">
-            <p className="font-display text-lg leading-[1.7] text-foreground sm:text-xl">
-              O objetivo não é uma transformação rápida. É construir{" "}
-              <span className="italic text-[var(--olive)]">
-                resultados consistentes que possam ser mantidos ao longo do tempo
-              </span>.
-            </p>
-          </blockquote>
-        </div>
-      </section>
-
-      <Divider />
 
       {/* DIFERENCIAIS */}
       <section className="bg-[var(--surface)]">
