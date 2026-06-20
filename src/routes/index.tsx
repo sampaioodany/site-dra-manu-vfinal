@@ -11,9 +11,8 @@ import pacienteHhaline from "@/assets/paciente-hhaline.jpeg.asset.json";
 import pacienteKaren from "@/assets/paciente-karen.jpeg.asset.json";
 import fotoComDraKaren from "@/assets/foto-com-dra-karen.jpeg.asset.json";
 import fotoComDraCamila from "@/assets/foto-com-dra-camila.jpeg.asset.json";
-import fotoComDraJessilane from "@/assets/foto-com-dra-jessilane-v3.jpg.asset.json";
 import pacienteJessilane from "@/assets/paciente-jessilane-v2.png.asset.json";
-import quemDraManoelaThumb from "@/assets/quem-materia-famosos.jpg.asset.json";
+
 
 
 const WHATSAPP_NUMBER = "5511917431212";
@@ -55,7 +54,7 @@ const ARTIGO_DESTAQUE = {
     "A revista QUEM destacou o encontro em São Paulo que reuniu nomes da medicina e do entretenimento em torno de saúde, longevidade e qualidade de vida — com a Dra. Manoela Souza como referência médica em emagrecimento clínico e acompanhamento individualizado.",
   veiculo: "Revista QUEM · Globo",
   url: "https://revistaquem.globo.com/eventos/noticia/2026/03/famosas-prestigiam-encontro-de-bem-estar-em-sp.ghtml",
-  capa: quemDraManoelaThumb.url,
+  capa: "/assets/quem-materia-dra-manoela.jpg",
 };
 
 const ARTIGOS_SECUNDARIOS = [
@@ -139,7 +138,7 @@ const HISTORIAS: Historia[] = [
     iniciais: "JA",
     texto:
       "Um acompanhamento que respeita o tempo, a rotina e a individualidade de cada pessoa.",
-    fotoComDra: fotoComDraJessilane.url,
+    fotoComDra: "/assets/jessilane-dra-manoela.jpg",
     fotoComDraPosition: "center 40%",
   },
 ];
