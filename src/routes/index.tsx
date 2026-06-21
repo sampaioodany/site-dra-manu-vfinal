@@ -16,11 +16,50 @@ import fotoComDraCamila from "@/assets/foto-com-dra-camila.jpeg.asset.json";
 
 
 const WHATSAPP_NUMBER = "5511917431212";
-const WHATSAPP_MESSAGE = encodeURIComponent(
-  "Olá, Dra. Manoela. Gostaria de agendar uma consulta particular.",
-);
-const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${WHATSAPP_MESSAGE}`;
+const WHATSAPP_BASE_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
 
+const WHATSAPP_MESSAGE =
+  "Olá, Dra. Manoela. Vim pelo site e gostaria de saber mais sobre o atendimento.";
+
+function getGoogleAdsClickId() {
+  if (typeof window === "undefined") return "";
+
+  const params = new URLSearchParams(window.location.search);
+
+  const clickIds = [
+    { type: "GCLID", value: params.get("gclid") },
+    { type: "GBRAID", value: params.get("gbraid") },
+    { type: "WBRAID", value: params.get("wbraid") },
+  ];
+
+  const foundClickId = clickIds.find((item) => item.value);
+
+  if (foundClickId?.value) {
+    localStorage.setItem("google_ads_click_id_type", foundClickId.type);
+    localStorage.setItem("google_ads_click_id_value", foundClickId.value);
+    localStorage.setItem("google_ads_click_id_date", new Date().toISOString());
+  }
+
+  const savedType = localStorage.getItem("google_ads_click_id_type");
+  const savedValue = localStorage.getItem("google_ads_click_id_value");
+
+  if (!savedType || !savedValue) return "";
+
+  return `${savedType}=${savedValue}`;
+}
+
+function getWhatsAppUrl() {
+  const clickId = getGoogleAdsClickId();
+
+  const message = clickId
+    ? `${WHATSAPP_MESSAGE}\n\nCódigo Google Ads: ${clickId}`
+    : WHATSAPP_MESSAGE;
+
+  const url = new URL(WHATSAPP_BASE_URL);
+  url.searchParams.set("text", message);
+
+  return url.toString();
+}
 const ENDERECO_CONSULTORIO = "R. Pedroso Alvarenga, 1255 - Itaim Bibi, São Paulo - SP, 04531-012";
 const GOOGLE_MAPS_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(ENDERECO_CONSULTORIO)}`;
 
@@ -358,7 +397,7 @@ function LandingPage() {
             Dra. Manoela Souza
           </span>
           <a
-            href={WHATSAPP_URL} onClick={trackWhatsAppConversion}
+            href={getWhatsAppUrl()} onClick={trackWhatsAppConversion}
             target="_blank"
             rel="noopener"
             className="hidden items-center gap-2.5 text-sm text-foreground/80 transition-colors hover:text-[var(--olive)] sm:inline-flex"
@@ -385,7 +424,7 @@ function LandingPage() {
             </p>
             <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
               <a
-                href={WHATSAPP_URL} onClick={trackWhatsAppConversion}
+                href={getWhatsAppUrl()} onClick={trackWhatsAppConversion}
                 target="_blank"
                 rel="noopener"
                 className="group inline-flex items-center justify-center gap-2 rounded-full bg-foreground px-7 py-3.5 text-sm font-medium text-background transition-all hover:bg-[var(--olive)]"
@@ -394,7 +433,7 @@ function LandingPage() {
                 <ArrowIcon className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </a>
               <a
-                href={WHATSAPP_URL} onClick={trackWhatsAppConversion}
+                href={getWhatsAppUrl()} onClick={trackWhatsAppConversion}
                 target="_blank"
                 rel="noopener"
                 className="inline-flex items-center justify-center gap-2.5 rounded-full border border-border bg-background px-7 py-3.5 text-sm font-medium text-foreground transition-colors hover:border-[var(--olive)] hover:text-[var(--olive)]"
@@ -580,7 +619,7 @@ function LandingPage() {
             </dl>
             <div className="mt-10">
               <a
-                href={WHATSAPP_URL} onClick={trackWhatsAppConversion}
+                href={getWhatsAppUrl()} onClick={trackWhatsAppConversion}
                 target="_blank"
                 rel="noopener"
                 className="group inline-flex items-center gap-2 rounded-full bg-foreground px-7 py-3.5 text-sm font-medium text-background transition-all hover:bg-[var(--olive)]"
@@ -962,7 +1001,7 @@ function LandingPage() {
 
           <div className="mt-12 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
             <a
-              href={WHATSAPP_URL} onClick={trackWhatsAppConversion}
+              href={getWhatsAppUrl()} onClick={trackWhatsAppConversion}
               target="_blank"
               rel="noopener"
               className="group inline-flex items-center justify-center gap-3 rounded-full bg-background px-9 py-4 text-base font-medium text-foreground shadow-[0_20px_45px_-20px_rgba(0,0,0,0.6)] transition-all hover:scale-[1.02] hover:bg-[var(--gold)] hover:text-foreground"
@@ -971,7 +1010,7 @@ function LandingPage() {
               Falar no WhatsApp
             </a>
             <a
-              href={WHATSAPP_URL} onClick={trackWhatsAppConversion}
+              href={getWhatsAppUrl()} onClick={trackWhatsAppConversion}
               target="_blank"
               rel="noopener"
               className="inline-flex items-center justify-center gap-3 rounded-full border border-background/40 px-9 py-4 text-base font-medium text-background transition-colors hover:border-background hover:bg-background/5"
@@ -1016,7 +1055,7 @@ function LandingPage() {
               </a>
             </div>
             <a
-              href={WHATSAPP_URL} onClick={trackWhatsAppConversion}
+              href={getWhatsAppUrl()} onClick={trackWhatsAppConversion}
               target="_blank"
               rel="noopener"
               className="inline-flex items-center gap-2.5 self-start text-sm text-foreground/80 transition-colors hover:text-[var(--olive)]"
@@ -1036,7 +1075,7 @@ function LandingPage() {
 
       {/* Sticky WhatsApp (mobile) */}
       <a
-        href={WHATSAPP_URL} onClick={trackWhatsAppConversion}
+        href={getWhatsAppUrl()} onClick={trackWhatsAppConversion}
         target="_blank"
         rel="noopener"
         aria-label="Falar no WhatsApp"
