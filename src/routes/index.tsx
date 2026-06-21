@@ -69,13 +69,21 @@ declare global {
   }
 }
 
-function trackWhatsAppConversion() {
+function trackWhatsAppConversion(event?: { preventDefault?: () => void }) {
+  event?.preventDefault?.();
+
+  const whatsappUrl = getWhatsAppUrl();
+
   if (typeof window !== "undefined" && typeof window.gtag === "function") {
     window.gtag("event", "conversion", {
       send_to: "AW-18245418780/YNRrCIng1sIcEJz-i_xD",
       value: 1.0,
       currency: "BRL",
     });
+  }
+
+  if (typeof window !== "undefined") {
+    window.open(whatsappUrl, "_blank", "noopener,noreferrer");
   }
 }
 
