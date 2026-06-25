@@ -15,51 +15,36 @@ import fotoComDraCamila from "@/assets/foto-com-dra-camila.jpeg.asset.json";
 
 
 
-const WHATSAPP_NUMBER = "5511917431212";
-const WHATSAPP_BASE_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
+const WHATSAPP_NUMBER = "5511941673378";
+const INSTAGRAM_URL = "https://www.instagram.com/medicamanusouza/";
 
-const WHATSAPP_MESSAGE =
-  "Olá, Dra. Manoela. Vim pelo site e gostaria de saber mais sobre o atendimento.";
-
-function getGoogleAdsClickId() {
-  if (typeof window === "undefined") return "";
-
-  const params = new URLSearchParams(window.location.search);
-
-  const clickIds = [
-    { type: "GCLID", value: params.get("gclid") },
-    { type: "GBRAID", value: params.get("gbraid") },
-    { type: "WBRAID", value: params.get("wbraid") },
-  ];
-
-  const foundClickId = clickIds.find((item) => item.value);
-
-  if (foundClickId?.value) {
-    localStorage.setItem("google_ads_click_id_type", foundClickId.type);
-    localStorage.setItem("google_ads_click_id_value", foundClickId.value);
-    localStorage.setItem("google_ads_click_id_date", new Date().toISOString());
-  }
-
-  const savedType = localStorage.getItem("google_ads_click_id_type");
-  const savedValue = localStorage.getItem("google_ads_click_id_value");
-
-  if (!savedType || !savedValue) return "";
-
-  return `${savedType}=${savedValue}`;
+function getWhatsAppUrl(gclid?: string | null) {
+  const baseMessage = "Olá, Dra. Manoela. Gostaria de agendar uma consulta particular.";
+  const message = gclid ? `${baseMessage} (gclid: ${gclid})` : baseMessage;
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }
 
-function getWhatsAppUrl() {
-  const clickId = getGoogleAdsClickId();
-
-  const message = clickId
-    ? `${WHATSAPP_MESSAGE}\n\nCódigo Google Ads: ${clickId}`
-    : WHATSAPP_MESSAGE;
-
-  const url = new URL(WHATSAPP_BASE_URL);
-  url.searchParams.set("text", message);
-
-  return url.toString();
+function useGclid() {
+  const [gclid, setGclid] = useState<string | null>(null);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const urlGclid = params.get("gclid");
+    if (urlGclid) {
+      try {
+        localStorage.setItem("gclid", urlGclid);
+      } catch {}
+      setGclid(urlGclid);
+    } else {
+      try {
+        const stored = localStorage.getItem("gclid");
+        if (stored) setGclid(stored);
+      } catch {}
+    }
+  }, []);
+  return gclid;
 }
+
 const ENDERECO_CONSULTORIO = "R. Pedroso Alvarenga, 1255 - Itaim Bibi, São Paulo - SP, 04531-012";
 const GOOGLE_MAPS_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(ENDERECO_CONSULTORIO)}`;
 
@@ -69,21 +54,13 @@ declare global {
   }
 }
 
-function trackWhatsAppConversion(event?: { preventDefault?: () => void }) {
-  event?.preventDefault?.();
-
-  const whatsappUrl = getWhatsAppUrl();
-
+function trackWhatsAppConversion() {
   if (typeof window !== "undefined" && typeof window.gtag === "function") {
     window.gtag("event", "conversion", {
       send_to: "AW-18245418780/YNRrCIng1sIcEJz-i_xD",
       value: 1.0,
       currency: "BRL",
     });
-  }
-
-  if (typeof window !== "undefined") {
-    window.open(whatsappUrl, "_blank", "noopener,noreferrer");
   }
 }
 
@@ -139,6 +116,7 @@ type Historia = {
   fotoComDraAspect?: string;
   fotoComDraFit?: "cover" | "contain";
   miniaturaPosition?: string;
+  avatarScale?: number;
 };
 
 const HISTORIAS: Historia[] = [
@@ -181,12 +159,14 @@ const HISTORIAS: Historia[] = [
   {
     nome: "Jessilane Alves",
     contexto: "Comunicadora · ex-BBB",
-    foto: "/assets/jessilane-avatar.jpg",
+    foto: "/assets/jessilane-avatar-v4.png",
     iniciais: "JA",
     texto:
       "Um acompanhamento que respeita o tempo, a rotina e a individualidade de cada pessoa.",
     fotoComDra: "/assets/jessilane-dra-manoela.jpg",
     fotoComDraPosition: "center 40%",
+    miniaturaPosition: "center 35%",
+    avatarScale: 1.6,
   },
 ];
 
@@ -290,6 +270,23 @@ function ArrowIcon({ className }: { className?: string }) {
   );
 }
 
+function InstagramIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      className={className}
+      aria-hidden="true"
+    >
+      <rect x="2" y="2" width="20" height="20" rx="5" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="12" cy="12" r="4.5" />
+      <circle cx="18" cy="6" r="1.25" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
 function ConsultorioCarousel() {
   const slides = [clinica1, clinica2, clinica3];
   const [index, setIndex] = useState(0);
@@ -368,17 +365,37 @@ function AvatarImg({
   alt,
   iniciais,
   objectPosition,
+  scale = 1,
 }: {
   src: string | null;
   alt: string;
   iniciais: string;
   objectPosition?: string;
+  scale?: number;
 }) {
   const [errored, setErrored] = useState(false);
   if (!src || errored) {
     return (
       <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[var(--olive)]/30 bg-[var(--olive)]/10 font-display text-base text-[var(--olive)]">
         {iniciais}
+      </div>
+    );
+  }
+  if (scale !== 1) {
+    return (
+      <div className="h-12 w-12 shrink-0 overflow-hidden rounded-full">
+        <img
+          src={src}
+          alt={alt}
+          loading="lazy"
+          decoding="async"
+          onError={() => setErrored(true)}
+          className="h-full w-full object-cover"
+          style={{
+            objectPosition: objectPosition ?? "center",
+            transform: `scale(${scale})`,
+          }}
+        />
       </div>
     );
   }
@@ -396,6 +413,8 @@ function AvatarImg({
 }
 
 function LandingPage() {
+  const gclid = useGclid();
+  const whatsappUrl = getWhatsAppUrl(gclid);
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Top bar */}
@@ -405,9 +424,9 @@ function LandingPage() {
             Dra. Manoela Souza
           </span>
           <a
-            href={getWhatsAppUrl()} onClick={trackWhatsAppConversion}
+            href={whatsappUrl} onClick={trackWhatsAppConversion}
             target="_blank"
-            rel="noopener"
+            rel="noopener noreferrer"
             className="hidden items-center gap-2.5 text-sm text-foreground/80 transition-colors hover:text-[var(--olive)] sm:inline-flex"
           >
             <WhatsAppIcon className="h-7 w-7" />
@@ -432,18 +451,18 @@ function LandingPage() {
             </p>
             <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
               <a
-                href={getWhatsAppUrl()} onClick={trackWhatsAppConversion}
+                href={whatsappUrl} onClick={trackWhatsAppConversion}
                 target="_blank"
-                rel="noopener"
+                rel="noopener noreferrer"
                 className="group inline-flex items-center justify-center gap-2 rounded-full bg-foreground px-7 py-3.5 text-sm font-medium text-background transition-all hover:bg-[var(--olive)]"
               >
                 Agendar consulta
                 <ArrowIcon className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </a>
               <a
-                href={getWhatsAppUrl()} onClick={trackWhatsAppConversion}
+                href={whatsappUrl} onClick={trackWhatsAppConversion}
                 target="_blank"
-                rel="noopener"
+                rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2.5 rounded-full border border-border bg-background px-7 py-3.5 text-sm font-medium text-foreground transition-colors hover:border-[var(--olive)] hover:text-[var(--olive)]"
               >
                 <WhatsAppIcon className="h-7 w-7" />
@@ -627,9 +646,9 @@ function LandingPage() {
             </dl>
             <div className="mt-10">
               <a
-                href={getWhatsAppUrl()} onClick={trackWhatsAppConversion}
+                href={whatsappUrl} onClick={trackWhatsAppConversion}
                 target="_blank"
-                rel="noopener"
+                rel="noopener noreferrer"
                 className="group inline-flex items-center gap-2 rounded-full bg-foreground px-7 py-3.5 text-sm font-medium text-background transition-all hover:bg-[var(--olive)]"
               >
                 Agendar consulta
@@ -771,6 +790,7 @@ function LandingPage() {
                     alt={h.nome}
                     iniciais={h.iniciais}
                     objectPosition={h.miniaturaPosition}
+                    scale={h.avatarScale}
                   />
                   <div className="min-w-0">
                     <p className="text-sm font-medium text-foreground">{h.nome}</p>
@@ -804,6 +824,16 @@ function LandingPage() {
             Entrevistas, colunas e participações em matérias sobre saúde, emagrecimento
             clínico e cuidado médico individualizado.
           </p>
+          <a
+            href={INSTAGRAM_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-6 inline-flex items-center gap-2.5 rounded-full border border-border bg-background/60 px-4 py-2.5 text-sm text-foreground/80 transition-colors hover:border-[var(--caras)]/40 hover:text-[var(--caras)]"
+          >
+            <InstagramIcon className="h-4 w-4" />
+            <span className="tracking-[0.04em]">Acompanhe no Instagram</span>
+            <ArrowIcon className="h-3.5 w-3.5" />
+          </a>
         </div>
 
         {/* Vídeos primeiro — maior autoridade visual */}
@@ -1009,18 +1039,18 @@ function LandingPage() {
 
           <div className="mt-12 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
             <a
-              href={getWhatsAppUrl()} onClick={trackWhatsAppConversion}
+              href={whatsappUrl} onClick={trackWhatsAppConversion}
               target="_blank"
-              rel="noopener"
+              rel="noopener noreferrer"
               className="group inline-flex items-center justify-center gap-3 rounded-full bg-background px-9 py-4 text-base font-medium text-foreground shadow-[0_20px_45px_-20px_rgba(0,0,0,0.6)] transition-all hover:scale-[1.02] hover:bg-[var(--gold)] hover:text-foreground"
             >
               <WhatsAppIcon className="h-6 w-6" />
               Falar no WhatsApp
             </a>
             <a
-              href={getWhatsAppUrl()} onClick={trackWhatsAppConversion}
+              href={whatsappUrl} onClick={trackWhatsAppConversion}
               target="_blank"
-              rel="noopener"
+              rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-3 rounded-full border border-background/40 px-9 py-4 text-base font-medium text-background transition-colors hover:border-background hover:bg-background/5"
             >
               Agendar consulta
@@ -1062,15 +1092,17 @@ function LandingPage() {
                 <ArrowIcon className="h-3.5 w-3.5" />
               </a>
             </div>
-            <a
-              href={getWhatsAppUrl()} onClick={trackWhatsAppConversion}
-              target="_blank"
-              rel="noopener"
-              className="inline-flex items-center gap-2.5 self-start text-sm text-foreground/80 transition-colors hover:text-[var(--olive)]"
-            >
-              <WhatsAppIcon className="h-7 w-7" />
-              WhatsApp
-            </a>
+            <div className="flex flex-col items-start gap-4 self-start sm:items-end">
+              <a
+                href={whatsappUrl} onClick={trackWhatsAppConversion}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2.5 text-sm text-foreground/80 transition-colors hover:text-[var(--olive)]"
+              >
+                <WhatsAppIcon className="h-7 w-7" />
+                WhatsApp
+              </a>
+            </div>
           </div>
           <p className="mt-10 max-w-xl text-xs leading-relaxed text-muted-foreground">
             Informações com finalidade educativa. Nenhum conteúdo substitui consulta médica.
@@ -1083,9 +1115,9 @@ function LandingPage() {
 
       {/* Sticky WhatsApp (mobile) */}
       <a
-        href={getWhatsAppUrl()} onClick={trackWhatsAppConversion}
+        href={whatsappUrl} onClick={trackWhatsAppConversion}
         target="_blank"
-        rel="noopener"
+        rel="noopener noreferrer"
         aria-label="Falar no WhatsApp"
         className="fixed bottom-5 right-5 z-40 inline-flex h-14 w-14 items-center justify-center rounded-full bg-foreground text-background shadow-lg shadow-black/10 transition-transform hover:scale-105 sm:h-14 sm:w-14"
       >
